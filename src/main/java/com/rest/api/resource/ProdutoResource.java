@@ -21,7 +21,7 @@ import com.rest.api.repository.Produtos;
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoResource {
-	
+
 	@Autowired
 	private Produtos produtos;
 	
