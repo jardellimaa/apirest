@@ -1,6 +1,7 @@
 package com.rest.api.resource;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,8 @@ public class ProdutoResource {
 			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
 		}
 		
+		LocalDateTime l = (LocalDateTime.now());
+		produto.setTempo(l);
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{codigo}").
 				buildAndExpand(produto.getCodigo()).toUri();
@@ -64,13 +67,12 @@ public class ProdutoResource {
 	public ResponseEntity<Produto> alterar(@RequestBody Produto produto){
 		
 		if (produtos.findById(produto.getCodigo()).isPresent()) {
+			LocalDateTime l = (LocalDateTime.now());
+			produto.setTempo(l);
 			produto = produtos.save(produto);
-						
 			return ResponseEntity.accepted().body(produto);
 		}
-		
 		return ResponseEntity.notFound().build();
-		
 	}
 	
 	@RequestMapping(value = "/{codigo}", method = RequestMethod.DELETE)
