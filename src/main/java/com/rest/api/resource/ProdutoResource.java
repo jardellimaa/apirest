@@ -29,7 +29,7 @@ public class ProdutoResource {
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Produto>> listar(){
-		return new ResponseEntity<List<Produto>>(produtos.findAll(), HttpStatus.OK);
+		return new ResponseEntity<List<Produto>>(produtos.findAllByOrderByCodigoAsc(), HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -75,6 +75,7 @@ public class ProdutoResource {
 		return ResponseEntity.notFound().build();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value = "/{codigo}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deletar(@PathVariable("codigo") Long codigo) {
 		

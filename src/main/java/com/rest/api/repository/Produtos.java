@@ -1,5 +1,6 @@
 package com.rest.api.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ public interface Produtos extends JpaRepository<Produto, Long>{
 	public Produto findByCodigoBarras(String codigoBarras);
 
 	public Optional<Produto> save(Optional<Produto> produto);
+	
+	public List<Produto> findAllByOrderByCodigoAsc();
 
 }
