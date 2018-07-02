@@ -47,16 +47,16 @@ public class ProdutoResource {
 	
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> salvar(@RequestBody Produto produto){
+	public ResponseEntity<?> salvar(@RequestBody Produto produto){
 		
 		LocalDateTime l = (LocalDateTime.now());
 		
 		produto.setTempo(l);
 		produto = produtos.save(produto);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{codigo}").
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").
 				buildAndExpand(produto.getCodigo()).toUri();
 		
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.created(uri).body(produto);
 	}
 	
 	@CrossOrigin
