@@ -34,7 +34,7 @@ public class ProdutoResource {
 	
 	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET, value="/{codigo}")
-	public ResponseEntity<?> buscar(@PathVariable("codigo") Long codigo){
+	public ResponseEntity<?> buscar(@PathVariable("codigo") Integer codigo){
 		
 		Optional<Produto> produto = produtos.findById(codigo);
 		
@@ -49,11 +49,8 @@ public class ProdutoResource {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> salvar(@RequestBody Produto produto){
 		
-		if (produtos.findById(produto.getCodigo()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
-		}
-		
 		LocalDateTime l = (LocalDateTime.now());
+		
 		produto.setTempo(l);
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{codigo}").
@@ -77,7 +74,7 @@ public class ProdutoResource {
 	
 	@CrossOrigin
 	@RequestMapping(value = "/{codigo}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deletar(@PathVariable("codigo") Long codigo) {
+	public ResponseEntity<Void> deletar(@PathVariable("codigo") Integer codigo) {
 		
 		Optional<Produto> produto = produtos.findById(codigo);
 		

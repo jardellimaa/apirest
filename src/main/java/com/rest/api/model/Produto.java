@@ -11,23 +11,33 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Produto {
-	
+
 	@Id
-	private Long codigo;
-	
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CODIGO_PRODUTO")
+	@SequenceGenerator(name = "CODIGO_PRODUTO", sequenceName = "SEQ_CODIGO_PRODUTO", allocationSize = 1)
+	private Integer codigo;
+
+	@Column(nullable = false)
 	private String nome;
-	
-	@Column(name="codigo_barras")
+
+	@Column(name = "codigo_barras", nullable = false)
 	private String codigoBarras;
-	
+
+	@Column(nullable = false)
 	private LocalDateTime tempo;
-	
+
 	public Produto() {
 		super();
-		// TODO Auto-generated constructor stub
+	}
+
+	public Produto(String nome, String codigoBarras, LocalDateTime tempo) {
+		super();
+		this.nome = nome;
+		this.codigoBarras = codigoBarras;
+		this.tempo = tempo;
 	}
 	
-	public Produto(Long codigo, String nome, String codigoBarras, LocalDateTime tempo) {
+	public Produto(Integer codigo, String nome, String codigoBarras, LocalDateTime tempo) {
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
@@ -35,21 +45,26 @@ public class Produto {
 		this.tempo = tempo;
 	}
 
-	public Long getCodigo() {
+	public Integer getCodigo() {
 		return codigo;
 	}
-	public void setCodigo(Long codigo) {
+
+	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getCodigoBarras() {
 		return codigoBarras;
 	}
+
 	public void setCodigoBarras(String codigoBarras) {
 		this.codigoBarras = codigoBarras;
 	}
@@ -61,5 +76,5 @@ public class Produto {
 	public void setTempo(LocalDateTime tempo) {
 		this.tempo = tempo;
 	}
-	
+
 }
