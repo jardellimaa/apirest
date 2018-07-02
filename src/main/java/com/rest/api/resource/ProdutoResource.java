@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,27 +28,29 @@ public class ProdutoResource {
 	@Autowired
 	private Produtos produtos;
 	
+	
 	@CrossOrigin
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ResponseEntity<List<Produto>> listar(){
-		return new ResponseEntity<List<Produto>>(produtos.findAllByOrderByCodigoAsc(), HttpStatus.OK);
+		//return new ResponseEntity<List<Produto>>(produtos.findAllByOrderByCodigoAsc(), HttpStatus.OK);
+		return ResponseEntity.ok(produtos.findAllByOrderByCodigoAsc());
 	}
 	
 	@CrossOrigin
-	@RequestMapping(method = RequestMethod.GET, value="/{codigo}")
+	@GetMapping(value="/{codigo}")
 	public ResponseEntity<?> buscar(@PathVariable("codigo") Integer codigo){
 		
 		Optional<Produto> produto = produtos.findById(codigo);
 		
 		if (produto.isPresent()) {
-			return ResponseEntity.status(HttpStatus.OK).body(produto);
+			return ResponseEntity.ok(produto);
 		}
 		
 		return ResponseEntity.notFound().build();
 	}
 	
 	@CrossOrigin
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public ResponseEntity<?> salvar(@RequestBody Produto produto){
 		
 		LocalDateTime l = (LocalDateTime.now());
@@ -60,7 +64,7 @@ public class ProdutoResource {
 	}
 	
 	@CrossOrigin
-	@RequestMapping (method = RequestMethod.PUT)
+	@PutMapping
 	public ResponseEntity<Produto> alterar(@RequestBody Produto produto){
 		
 		if (produtos.findById(produto.getCodigo()).isPresent()) {
@@ -73,7 +77,7 @@ public class ProdutoResource {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = "/{codigo}", method = RequestMethod.DELETE)
+	@DeleteMapping(value = "/{codigo}")
 	public ResponseEntity<Void> deletar(@PathVariable("codigo") Integer codigo) {
 		
 		Optional<Produto> produto = produtos.findById(codigo);
