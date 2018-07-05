@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.rest.api.model.Produto;
 import com.rest.api.repository.Produtos;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoResource {
@@ -28,30 +29,26 @@ public class ProdutoResource {
 	@Autowired
 	private Produtos produtos;
 	
-	
-	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Produto>> listar(){
 		//return new ResponseEntity<List<Produto>>(produtos.findAllByOrderByCodigoAsc(), HttpStatus.OK);
 		return ResponseEntity.ok(produtos.findAllByOrderByCodigoAsc());
 	}
 	
-	@CrossOrigin
 	@GetMapping(value="/{codigo}")
-	public ResponseEntity<?> buscar(@PathVariable("codigo") Integer codigo){
+	public ResponseEntity<Produto> buscar(@PathVariable("codigo") Integer codigo){
 		
 		Optional<Produto> produto = produtos.findById(codigo);
 		
 		if (produto.isPresent()) {
-			return ResponseEntity.ok(produto);
+			return ResponseEntity.ok(produto.get());
 		}
 		
 		return ResponseEntity.notFound().build();
 	}
 	
-	@CrossOrigin
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Produto produto){
+	public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
 		
 		LocalDateTime l = (LocalDateTime.now());
 		
@@ -63,20 +60,17 @@ public class ProdutoResource {
 		return ResponseEntity.created(uri).body(produto);
 	}
 	
-	@CrossOrigin
 	@PutMapping
 	public ResponseEntity<Produto> alterar(@RequestBody Produto produto){
 		
 		if (produtos.findById(produto.getCodigo()).isPresent()) {
-			LocalDateTime l = (LocalDateTime.now());
-			produto.setTempo(l);
+			produto.setTempo(LocalDateTime.now());
 			produto = produtos.save(produto);
 			return ResponseEntity.accepted().body(produto);
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
-	@CrossOrigin
 	@DeleteMapping(value = "/{codigo}")
 	public ResponseEntity<Void> deletar(@PathVariable("codigo") Integer codigo) {
 		
