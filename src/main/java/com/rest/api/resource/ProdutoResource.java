@@ -3,7 +3,6 @@ package com.rest.api.resource;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,56 +30,47 @@ public class ProdutoResource {
 	
 	@GetMapping
 	public ResponseEntity<List<Produto>> listar(){
-		//return new ResponseEntity<List<Produto>>(produtos.findAllByOrderByCodigoAsc(), HttpStatus.OK);
 		return ResponseEntity.ok(produtos.findAllByOrderByCodigoAsc());
 	}
 	
 	@GetMapping(value="/{codigo}")
 	public ResponseEntity<Produto> buscar(@PathVariable("codigo") Integer codigo){
-		
-		Optional<Produto> produto = produtos.findById(codigo);
-		
-		if (produto.isPresent()) {
-			return ResponseEntity.ok(produto.get());
+		if (produtos.existsById(codigo)) {
+			return ResponseEntity.ok(produtos.findById(codigo).get());
 		}
-		
 		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping(value="/last")
+	public ResponseEntity<Produto> buscarUltimo(){
+		return ResponseEntity.ok(produtos.findLast());
 	}
 	
 	@PostMapping
 	public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
-		
-		LocalDateTime l = (LocalDateTime.now());
-		
-		produto.setTempo(l);
+		produto.setTempo(LocalDateTime.now());
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").
 				buildAndExpand(produto.getCodigo()).toUri();
-		
 		return ResponseEntity.created(uri).body(produto);
 	}
 	
-	@PutMapping
-	public ResponseEntity<Produto> alterar(@RequestBody Produto produto){
-		
-		if (produtos.findById(produto.getCodigo()).isPresent()) {
+	@PutMapping(value="/{codigo}")
+	public ResponseEntity<Produto> alterar(@PathVariable("codigo") Integer codigo, @RequestBody Produto produto){
+		if (produtos.existsById(codigo)) {
+			produto.setCodigo(codigo);
 			produto.setTempo(LocalDateTime.now());
-			produto = produtos.save(produto);
-			return ResponseEntity.accepted().body(produto);
+			return ResponseEntity.accepted().body(produtos.save(produto));
 		}
 		return ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping(value = "/{codigo}")
 	public ResponseEntity<Void> deletar(@PathVariable("codigo") Integer codigo) {
-		
-		Optional<Produto> produto = produtos.findById(codigo);
-		
-		if (produto.isPresent()) {
+		if (produtos.existsById(codigo)) {
 			produtos.deleteById(codigo);
 			return ResponseEntity.noContent().build();
 		}
-		
 		return ResponseEntity.notFound().build();
 	}
 
