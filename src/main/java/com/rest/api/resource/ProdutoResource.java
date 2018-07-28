@@ -49,6 +49,7 @@ public class ProdutoResource {
 	@PostMapping
 	public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
 		produto.setTempo(LocalDateTime.now());
+		produto.setCodigo(null);
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").
 				buildAndExpand(produto.getCodigo()).toUri();
