@@ -48,8 +48,12 @@ public class ProdutoResource {
 	
 	@PostMapping
 	public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
+		
+		if(produtos.existsByCodigoBarras(produto.getCodigoBarras())) {
+			return ResponseEntity.status(302).build();
+		}
+		
 		produto.setTempo(LocalDateTime.now());
-		produto.setCodigo(null);
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").
 				buildAndExpand(produto.getCodigo()).toUri();
