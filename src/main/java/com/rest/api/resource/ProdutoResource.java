@@ -50,9 +50,10 @@ public class ProdutoResource {
 	public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
 		
 		if(produtos.existsByCodigoBarras(produto.getCodigoBarras())) {
-			return ResponseEntity.status(302).build();
+			return ResponseEntity.status(400).build();
 		}
 		
+		produto.setCodigo(null);
 		produto.setTempo(LocalDateTime.now());
 		produto = produtos.save(produto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}").

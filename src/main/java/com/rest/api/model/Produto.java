@@ -9,15 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CODIGO_PRODUTO")
 	@SequenceGenerator(name = "CODIGO_PRODUTO", sequenceName = "SEQ_CODIGO_PRODUTO", allocationSize = 1)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Integer codigo;
 
 	@Column(nullable = false)
